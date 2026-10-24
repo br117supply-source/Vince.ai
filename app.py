@@ -6,11 +6,14 @@ from openai import OpenAI
 st.set_page_config(page_title="Vince.ai Unfiltered", layout="wide")
 st.title("Vince.ai Unfiltered")
 
-# 2. Hardcoded Key fallback using os.getenv (no st.secrets crash)
-OPENROUTER_API_KEY = os.getenv(
-    "OPENROUTER_API_KEY", 
-    "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"
-)
+# 2. Safely fetch API key from Streamlit secrets or OS Environment
+try:
+    OPENROUTER_API_KEY = st.secrets["OPENROUTER_API_KEY"]
+except Exception:
+    OPENROUTER_API_KEY = os.getenv(
+        "OPENROUTER_API_KEY", 
+        "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"
+    )
 
 # 3. OpenRouter Client Setup
 client = OpenAI(
